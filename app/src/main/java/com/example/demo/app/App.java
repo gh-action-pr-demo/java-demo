@@ -5,6 +5,6 @@ import com.example.demo.core.CoreService;
 public class App {
     public static void main(String[] args) {
         CoreService service = new CoreService();
-        System.out.println(service.sayHello("world"));
+        System.out.println(service.sayHello("world heelo"));
     }
 }

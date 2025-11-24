@@ -3,8 +3,6 @@ name: Dependency Review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  # pull_request_target:
-  #   types: [opened, synchronize, reopened]
   issues:
     types: [labeled, unlabeled]
 
@@ -301,17 +299,13 @@ jobs:
           # It will discover all build.gradle files recursively
           dependency-graph: generate-and-submit
 
-      - name: Force full dependency review baseline
-        run: |
-          echo "{}" > /tmp/empty-deps.json
-
       - name: Dependency Review
         id: dep-review
         if: steps.get-pr-number.outputs.is_pr == 'true' && steps.check-ignored.outputs.ignored != 'true'
         continue-on-error: true
         uses: actions/dependency-review-action@v4
         with:
-          base-ref: /tmp/empty-deps.json
+          base-ref: ${{ github.event.pull_request.base.sha }}
           head-ref: ${{ github.event.pull_request.head.sha }}
           fail-on-severity: ${{ steps.policy-config.outputs.fail_on_severity }}
           comment-summary-in-pr: never  # Disable default comment, use custom filter
